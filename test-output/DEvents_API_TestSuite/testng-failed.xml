@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite thread-count="3" guice-stage="DEVELOPMENT" name="Failed suite [DEvents_API_TestSuite]" parallel="classes">
+  <listeners>
+    <listener class-name="com.DEvents.utils.Listeners"/>
+  </listeners>
+  <test thread-count="3" name="DEvents_API_Tests(failed)" parallel="classes">
+    <classes>
+      <class name="com.DEvents.tests.TestAPI_GetParticipants">
+        <methods>
+          <include name="setup"/>
+          <include name="checkStatusCode"/>
+          <include name="getResponse"/>
+          <include name="validateJSONSchema"/>
+          <include name="checkResponseBody"/>
+        </methods>
+      </class> <!-- com.DEvents.tests.TestAPI_GetParticipants -->
+    </classes>
+  </test> <!-- DEvents_API_Tests(failed) -->
+</suite> <!-- Failed suite [DEvents_API_TestSuite] -->
