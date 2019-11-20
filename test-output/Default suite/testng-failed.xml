@@ -3,15 +3,19 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.DEvents.tests.TestAPI_GetParticipants">
+      <class name="com.DEvents.tests.TestAPI_GetParticipants3">
         <methods>
           <include name="setup"/>
+          <include name="afterMethod"/>
+          <include name="teardown"/>
+          <include name="methodSetup"/>
           <include name="checkStatusCode"/>
-          <include name="getResponse"/>
-          <include name="validateJSONSchema"/>
-          <include name="checkResponseBody"/>
+          <include name="fullteardown"/>
+          <include name="testSetup"/>
+          <include name="checkResponseTime"/>
+          <include name="getWeather"/>
         </methods>
-      </class> <!-- com.DEvents.tests.TestAPI_GetParticipants -->
+      </class> <!-- com.DEvents.tests.TestAPI_GetParticipants3 -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

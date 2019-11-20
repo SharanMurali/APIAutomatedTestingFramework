@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: TestSuite
 -------------------------------------------------------------------------------
-Tests run: 6, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 32.428 s <<< FAILURE! - in TestSuite
-checkResponseBody(com.DEvents.tests.TestAPI_GetParticipants)  Time elapsed: 21.291 s  <<< FAILURE!
+Tests run: 11, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 39.741 s <<< FAILURE! - in TestSuite
+checkResponseBody(com.DEvents.tests.TestAPI_GetParticipants_demo)  Time elapsed: 22.622 s  <<< FAILURE!
 java.lang.IllegalStateException: DB hit failed.
-	at com.DEvents.tests.TestAPI_GetParticipants.checkResponseBody(TestAPI_GetParticipants.java:115)
+	at com.DEvents.tests.TestAPI_GetParticipants_demo.checkResponseBody(TestAPI_GetParticipants_demo.java:119)
 
