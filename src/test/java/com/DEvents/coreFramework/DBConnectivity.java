@@ -25,7 +25,7 @@ public class DBConnectivity {
 	public static Properties properties=null;
 	public static String filepath=null;
 	public static FileInputStream in;
-	
+
 	public static FileInputStream fi;
 	public static FileOutputStream fo;
 	public static XSSFWorkbook wb;
@@ -92,7 +92,7 @@ public class DBConnectivity {
 				try
 				{
 					rset = stmt.executeQuery(sQuery);
-					
+
 					fi = new FileInputStream(System.getProperty("user.dir")+"/src/test/java/com/DEvents/tests/jsonResults/"+xlOutputfilename+".xlsx");
 					wb = new XSSFWorkbook(fi);
 					ws = wb.createSheet("DB_Data");
@@ -119,14 +119,14 @@ public class DBConnectivity {
 						}
 						j++;
 					}
-					
+
 					fo = new FileOutputStream(System.getProperty("user.dir")+"/src/test/java/com/DEvents/tests/jsonResults/"+xlOutputfilename+".xlsx");
 					wb.write(fo);
 					wb.close();
 					fi.close();
 					fo.close();
 					System.out.println("database results written successfully into excel");
-					
+
 				}
 				finally
 				{
@@ -167,8 +167,8 @@ public class DBConnectivity {
 
 		return rset;
 	}
-	
-	
+
+
 	/**
 	 * Method to hit a query in MySQL DB and retrieve data in String 2D Array
 	 * @author SharanMurali
@@ -307,7 +307,7 @@ public class DBConnectivity {
 
 		return tablematrix;
 	}
-	
+
 	/**
 	 * Method to hit a query in MySQL DB and retrieve record counts only
 	 * @author SharanMurali
@@ -399,7 +399,7 @@ public class DBConnectivity {
 
 		return rowCount;
 	}
-	
+
 	/**
 	 * Method to replace parameters in a SQL query String
 	 * @param sqlQuery
@@ -408,11 +408,16 @@ public class DBConnectivity {
 	 * @throws IOException
 	 */
 	public static String getSQLQuery(String sqlQuery, String sqlParameters) throws IOException {
-		
+
+
 		List<String> qParms = new ArrayList<String>(Arrays.asList(sqlParameters.split(";")));
 		System.out.println("Query before Modification: "+sqlQuery);
 		int count = StringUtils.countMatches(sqlQuery, "@PARM");
-		if (count!=qParms.size()) {
+		int parmSize = 0;
+		if(!sqlParameters.contentEquals("")) {
+			parmSize=qParms.size();
+		}
+		if (count!=parmSize) {
 			System.out.println("Mismatch in number of Variables between SQL query and passed paramaters");
 		}
 		else {
@@ -420,7 +425,7 @@ public class DBConnectivity {
 			while (itr.hasNext()) {
 				String var = itr.next();
 				//if (key.toString().startsWith(queryInitials)) {
-					//System.out.println("Key: " + key + "    Value: " + map.get(key));
+				//System.out.println("Key: " + key + "    Value: " + map.get(key));
 				sqlQuery = sqlQuery.replaceFirst("@PARM", var);
 			}	
 		}
@@ -434,7 +439,7 @@ public class DBConnectivity {
 		String[][] str = td.getResultFromDB("select distinct USER_EMAIL_ID from de_event_users");
 		System.out.println(str[0][0]); 
 	}
-	
+
 	/**
 	 * To read Properties file for DB Configuration details
 	 **/
@@ -452,6 +457,6 @@ public class DBConnectivity {
 			e.printStackTrace();
 		}
 	}
-	
+
 
 }

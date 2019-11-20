@@ -23,7 +23,7 @@ import io.restassured.module.jsv.*;
  * @author shmurali
  * @since 17 Nov 2019
  */
-public class TestAPI_GetParticipants extends TestBase{
+public class TestAPI_GetParticipants_demo extends TestBase{
 
 	//List of data input needed for tests
 	String pathQuery="";
@@ -95,6 +95,7 @@ public class TestAPI_GetParticipants extends TestBase{
 	void checkResponseTime() {
 
 		Long responseTime = response.getTime();
+		System.out.println("Response Time : " + responseTime +" milliseconds");
 		report.log(LogStatus.INFO, "Actual Response Time: "+responseTime+" milliseconds");
 		Assert.assertTrue(responseTime<5000, "Response takes more than 5 seconds");
 	}
@@ -105,7 +106,7 @@ public class TestAPI_GetParticipants extends TestBase{
 		response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchemaInClasspath("jsonSchema/"+jsonSchemaFile));
 	}
 
-	@Test (enabled = false,dependsOnMethods = {"checkStatusCode","validateJSONSchema"}, description="Validating Response body data against DB")
+	@Test (enabled = true,dependsOnMethods = {"checkStatusCode","validateJSONSchema"}, description="Validating Response body data against DB")
 	void checkResponseBody() throws ClassNotFoundException, IOException, SQLException {
 
 		String responseBody = response.getBody().asString();
