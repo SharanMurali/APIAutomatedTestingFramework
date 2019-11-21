@@ -2,8 +2,8 @@
 <suite name="DEvents_API_TestSuite">
 	<test name="DEvents_API_Tests">
 		<classes>
-			<class name="com.DEvents.tests.TestAPI_GetParticipants"></class>
 			<class name="com.DEvents.tests.TestAPI_GetParticipants_demo"></class>
+			<!-- <class name="com.DEvents.tests.TestAPI_GetParticipants_demo"></class> -->
 		</classes>
 	</test>
 </suite>
