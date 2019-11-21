@@ -75,13 +75,12 @@ public class TestBase {
 	public void checkResults(ITestResult result) {
 		
 		if(result.getStatus()==ITestResult.FAILURE) {
-			report.log(LogStatus.FAIL, "Test Method Failed:"+result.getMethod().getMethodName());
-			report.log(LogStatus.FAIL, "FAILED DUE TO EXCEPTION: "+result.getThrowable());
+			report.log(LogStatus.FAIL, "Test Method Failed: "+result.getMethod().getMethodName()+"<br>" +
+					"FAILED DUE TO EXCEPTION: "+result.getThrowable());
 		}
 		else if (result.getStatus()==ITestResult.SKIP) {
-			report.log(LogStatus.SKIP, "Test Skipped");
-			report.log(LogStatus.SKIP, "Skipped due to: "+ result.getSkipCausedBy());
-			
+			report.log(LogStatus.SKIP, "Test Skipped"+"<br>"+
+					"Skipped due to: "+ result.getSkipCausedBy());
 		}
 		else if (result.getStatus()==ITestResult.SUCCESS) {
 			report.log(LogStatus.PASS, "Test Passed");

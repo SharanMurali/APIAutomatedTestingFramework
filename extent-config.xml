@@ -16,18 +16,18 @@
 		<documentTitle>Automation_Report</documentTitle>
 
 		<!-- report name - displayed at top-nav -->
-		<reportName></reportName>
+		<reportName>D-Events Mobile App | </reportName>
 
 		<!-- report headline - displayed at top-nav, after reportHeadline -->
 		<reportHeadline>API_TestAutomation_Report</reportHeadline>
 
 		<!-- global date format override -->
 		<!-- defaults to yyyy-MM-dd -->
-		<dateFormat>yyyy-MM-dd</dateFormat>
+		<dateFormat>MMM dd, yyyy</dateFormat>
 
 		<!-- global time format override -->
 		<!-- defaults to HH:mm:ss -->
-		<timeFormat>HH:mm:ss</timeFormat>
+		<timeFormat>hh:mm:ss a zzz</timeFormat>
 
 		<!-- custom javascript -->
 		<scripts>
@@ -35,6 +35,10 @@
         $(document).ready(function() {
          	$('#parentWithoutNodes').prop("checked", true).click();
 			$('#test-count-setting > div.modal-footer > a')[0].click();
+			$('#step-dashboard-filter-info').prop("checked", false).click();
+			$('#step-status-filter > div.modal-footer > a')[0].click();
+			$('.dashboard-view').click();
+			
         });
       ]]>
 		</scripts>
@@ -42,7 +46,8 @@
 		<!-- custom styles -->
 		<styles>
       <![CDATA[
-        
+        	.report-name {font-size: large; color: rgb(134, 188, 37);}
+        	.report-headline {font-size: large;}
       ]]>
 		</styles>
 	</configuration>
