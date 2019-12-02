@@ -17,6 +17,8 @@ import com.relevantcodes.extentreports.LogStatus;
 import io.restassured.RestAssured;
 import io.restassured.http.Method;
 import io.restassured.module.jsv.*;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 
 /**
  * This validates the API that fetches all the Participants “User ID” 
@@ -24,6 +26,9 @@ import io.restassured.module.jsv.*;
  * @since 17 Nov 2019
  */
 public class TestAPI_GetParticipants extends TestBase{
+	
+	public static RequestSpecification httpRequest;
+	public static Response response;
 
 	//List of data input needed for tests
 	String pathQuery="";
@@ -105,7 +110,7 @@ public class TestAPI_GetParticipants extends TestBase{
 		response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchemaInClasspath("jsonSchema/"+jsonSchemaFile));
 	}
 
-	@Test (enabled = false,dependsOnMethods = {"checkStatusCode","validateJSONSchema"}, description="Validating Response body data against DB")
+	@Test (enabled = true,dependsOnMethods = {"checkStatusCode","validateJSONSchema"}, description="Validating Response body data against DB")
 	void checkResponseBody() throws ClassNotFoundException, IOException, SQLException {
 
 		String responseBody = response.getBody().asString();

@@ -18,9 +18,6 @@ import io.restassured.specification.RequestSpecification;
 
 public class TestBase {
 
-	public static RequestSpecification httpRequest;
-	public static Response response;
-
 	public static Properties properties=null;
 	public static String filepath=null;
 	public static FileInputStream in;

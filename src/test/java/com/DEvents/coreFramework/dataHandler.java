@@ -31,6 +31,17 @@ public class dataHandler {
 	 * 
 	 */
 	public static void json2xlsx(String jsonInput, String xlOutputfilename){
+		
+		String a=Character.toString(jsonInput.charAt(0));
+		switch (a) {
+		case "{":
+			jsonInput="["+jsonInput+"]";
+			break;
+		default:
+			break;
+		}
+			
+		
 		String jsonString = "{\"infile\": "+jsonInput+"}";
 		JSONObject output;
 		try {
