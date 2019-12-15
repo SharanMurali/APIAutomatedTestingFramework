@@ -9,19 +9,19 @@ import java.util.Properties;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
+import com.DEvents.utils.XLUtils;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 
 public class TestBase {
 
-	public static RequestSpecification httpRequest;
-	public static Response response;
+	//	public static RequestSpecification httpRequest;
+	//	public static Response response;
 
 	public static Properties properties=null;
+	public static String configFile=null;
 	public static String filepath=null;
 	public static FileInputStream in;
 
@@ -32,13 +32,17 @@ public class TestBase {
 	private static String fileSeperator = System.getProperty("file.separator");
 	private static String reportFilepath = System.getProperty("user.dir") +fileSeperator+ "TestReport";
 	private static String reportFileLocation =  reportFilepath +fileSeperator+ reportFileName;
-	
+
+	public static String DB_eventID="43";
+	public static String DB_kioskID="23";
+
 	@BeforeSuite
-	public void setup() {
+	public void setup() throws ClassNotFoundException, IOException {
 		properties = new Properties();
-		filepath = "src/test/java/com/DEvents/tests/Config/API_Config.properties";
+		configFile = "src/test/java/com/DEvents/tests/Config/API_Config.properties";
+		filepath = System.getProperty("user.dir") + "/" + "src/test/java/com/DEvents/tests/Config/APITestControl.xlsx"; // Common for all APIs
 		try {
-			in = new FileInputStream(System.getProperty("user.dir") + "/" + filepath);
+			in = new FileInputStream(System.getProperty("user.dir") + "/" + configFile);
 			properties.load(in);
 
 		} catch (IOException e) {
@@ -51,29 +55,49 @@ public class TestBase {
 		extent = new ExtentReports (getReportPath(reportFilepath));
 		//Set environment details
 		extent
-			.addSystemInfo("Project Name", "D-Events Mobile App")
-			.addSystemInfo("Environment", "API-RestAssured")
-			.addSystemInfo("Author", "Sharan Murali");
+		.addSystemInfo("Project Name", "D-Events Mobile App")
+		.addSystemInfo("Environment", "API-RestAssured")
+		.addSystemInfo("Author", "Sharan Murali");
 		//loading the external xml file (i.e., extent-config.xml) which was placed under the base directory
 		//You could find the xml file below. Create xml file in your project and copy past the code mentioned below
 		extent.loadConfig(new File(System.getProperty("user.dir")+"\\extent-config.xml"));
+		
+		/*Code for Data Mock-up in Database */
+		if(properties.getProperty("Test_Data_Injection").equalsIgnoreCase("true")) {
+			if(DBConnectivity.executeBatchQuery(dataHandler.querySetReader("D;I"))) {
+				System.out.println("Data Mockup completed successfully");
+
+				String[][] str = DBConnectivity.getResultFromDB(XLUtils.getCellData(filepath,"DataSourcing",1,XLUtils.getColumnIndexbyHeader(filepath,"DataSourcing","Query")).trim());
+				DB_eventID=str[0][0];
+				str = DBConnectivity.getResultFromDB(XLUtils.getCellData(filepath,"DataSourcing",2,XLUtils.getColumnIndexbyHeader(filepath,"DataSourcing","Query")).trim());
+				DB_kioskID=str[0][0];
+
+
+			}
+			else {
+				System.out.println("Data Mockup Failed");
+			}
+		}
+		else if(properties.getProperty("Test_Data_Injection").equalsIgnoreCase("false")) {
+			System.out.println("Data Mockup Ignored");
+		}
 
 	}
-	
+
 	@BeforeClass
 	public void testSetup() {
 		parentClass=extent.startTest(this.getClass().getSimpleName());
 	}
-	
+
 	@BeforeMethod
 	public void methodSetup(Method method) {
 		report=extent.startTest(method.getAnnotation(Test.class).description());
 		parentClass.appendChild(report);
 	}
-	
+
 	@AfterMethod
 	public void checkResults(ITestResult result) {
-		
+
 		if(result.getStatus()==ITestResult.FAILURE) {
 			report.log(LogStatus.FAIL, "Test Method Failed: "+result.getMethod().getMethodName()+"<br>" +
 					"FAILED DUE TO EXCEPTION: "+result.getThrowable());
@@ -84,20 +108,27 @@ public class TestBase {
 		}
 		else if (result.getStatus()==ITestResult.SUCCESS) {
 			report.log(LogStatus.PASS, "Test Passed");
-			
+
 		}
-		
+
 	}
-	
+
 	@AfterClass
 	public void teardown() {
 		parentClass.getRunStatus();
 		extent.endTest(parentClass);
 	}
-	
+
 	@AfterSuite
-	public void fullteardown() {
+	public void fullteardown() throws ClassNotFoundException, IOException {
 		extent.flush();
+
+		/*Code for Data cleanup in Database */
+		if(DBConnectivity.executeBatchQuery(dataHandler.querySetReader("D"))) {
+			System.out.println("Data Cleanup completed successfully");
+		}else {
+			System.out.println("Data Cleanup Failed");
+		}
 	}
 
 	//Create the report path
@@ -113,6 +144,10 @@ public class TestBase {
 			}
 		} else {
 			System.out.println("Directory already exists: " + path);
+			File testReport = new File(reportFileLocation);
+			if(testReport.exists()) {
+				testReport.delete();
+			}
 		}
 		return reportFileLocation;
 	}

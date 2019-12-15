@@ -178,7 +178,7 @@ public class DBConnectivity {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public String[][] getResultFromDB(String sQuery) throws ClassNotFoundException, IOException{
+	public static String[][] getResultFromDB(String sQuery) throws ClassNotFoundException, IOException{
 
 		Statement stmt = null;
 		ResultSet rset = null;
@@ -317,7 +317,7 @@ public class DBConnectivity {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public int getRecordCountFromDB(String sQuery) throws ClassNotFoundException, IOException{
+	public static int getRecordCountFromDB(String sQuery) throws ClassNotFoundException, IOException{
 
 		int rowCount = 0;
 		Statement stmt = null;
@@ -401,6 +401,97 @@ public class DBConnectivity {
 	}
 
 	/**
+	 * Method to hit a query in MySQL DB and execute Batch query
+	 * @author SharanMurali
+	 * @since Dec, 1 2019
+	 * @param queryBatch
+	 * @return boolean
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	public static Boolean executeBatchQuery(String queryBatch[]) throws ClassNotFoundException, IOException{
+
+		Boolean result= false;
+		Statement stmt = null;
+
+		readDBPropertyfile();
+
+		/* Creation of URL to be passed to the JDBC driver */
+		String url = "jdbc:"+properties.getProperty("dbSystem")+"://"+properties.getProperty("dbServerName")+":"+properties.getProperty("dbPort")+"/"+properties.getProperty("dbSchema")+"?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=IST";
+
+		try
+		{
+			/* Loading the MySQL JDBC driver  */
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			/* Creating a connection object */
+			Connection con = DriverManager.getConnection(url,properties.getProperty("dbUserName"),properties.getProperty("dbPassword") );
+			//        System.out.println(" User " + properties.getProperty("dbUserName") + " connected.");
+			//			System.out.println(" Connection to MySQL established. \n");
+
+			try
+			{
+				String schemaName=properties.getProperty("dbSchema");
+				if (schemaName != null && schemaName.length() != 0) {
+
+					try {
+						/* Creating a statement object from an active connection schema*/
+						stmt = con.createStatement();
+						con.setAutoCommit(false);
+						stmt.executeUpdate("USE " + schemaName);
+					} catch (SQLException exception) {
+						System.out.println(exception.getMessage());
+						exception.printStackTrace();
+					}    
+
+				}
+				/* System.out.println(" Statement object created. \n"); */
+
+				/* Adding SQL query and executing Batch */
+				try
+				{
+					for(String query:queryBatch) {
+						stmt.addBatch(query);
+					}
+
+					stmt.executeBatch();
+					con.commit();
+					result=true;
+				}
+				finally
+				{
+					/* Close the statement */
+					stmt.close();
+				}
+			}
+			finally
+			{
+				/* Close the connection */
+				con.close();
+			}
+
+		}
+		catch (SQLException ex)
+		{
+			System.out.println("*** SQLException caught ***");
+
+			while (ex != null)
+			{
+				System.out.println(" Error code: " + ex.getErrorCode());
+				System.out.println(" SQL State: " + ex.getSQLState());
+				System.out.println(" Message: " + ex.getMessage());
+				ex.printStackTrace();
+				ex = ex.getNextException();
+			}
+
+			throw new IllegalStateException ("DB hit failed.") ;
+		}
+
+
+		return result;
+	}
+
+	/**
 	 * Method to replace parameters in a SQL query String
 	 * @param sqlQuery
 	 * @param sqlParameters
@@ -434,11 +525,11 @@ public class DBConnectivity {
 	}
 
 
-	public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException {
-		DBConnectivity td = new DBConnectivity();
-		String[][] str = td.getResultFromDB("select distinct USER_EMAIL_ID from de_event_users");
-		System.out.println(str[0][0]); 
-	}
+//	public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException {
+//		DBConnectivity td = new DBConnectivity();
+//		String[][] str = td.getResultFromDB("select distinct USER_EMAIL_ID from de_event_users");
+//		System.out.println(str[0][0]); 
+//	}
 
 	/**
 	 * To read Properties file for DB Configuration details

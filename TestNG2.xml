@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="DEvents_API_TestSuite" verbose="1" parallel="false">
+	<test name="DEvents_API_Tests" preserve-order="true">
+ 		<classes>
+			<class name="com.DEvents.tests.TestAPI_RegisterOrCancelSessions_P1"></class>
+		</classes>
+	</test>
+	<test name="DEvents_API_Tests2" preserve-order="true">
+ 		<classes>
+			<class name="com.DEvents.tests.TestAPI_RegisterOrCancelSessions_N1"></class>
+		</classes>
+	</test>
+</suite>
