@@ -22,16 +22,16 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 /**
- * This validates the API that fetches all the Participants “User ID” 
+ * This validates the API that checks if Invalid QR Code error is displayed for incorrect Event ID - Negative Scenario
  * @author shmurali
- * @since 17 Nov 2019
+ * @since 1 Dec 2019
  */
-public class TestAPI_GetParticipants extends TestBase{
+public class TestAPI_MarkMyAttendance_N1 extends TestBase{
 	
 	public static RequestSpecification httpRequest;
 	public static Response response;
 	
-	String sheetName = "GetParticipants";	//Change as per API being Tested
+	String sheetName = "MarkMyAttendance_N1";	//Change as per API being Tested
 
 	//List of data input needed for tests
 	String pathQuery="";
@@ -54,7 +54,7 @@ public class TestAPI_GetParticipants extends TestBase{
 		statusCode=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Status Code")).trim();
 		cntntType=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Content-Type")).trim();
 		cntntEncode=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Content Encoding")).trim();
-		respTime=Integer.parseInt(XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Expected Max. Response Time (sec)")).trim());
+		respTime=Integer.parseInt(XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Expected Max. Response Time (sec)")));
 		jsonSchemaFile=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Schema File")).trim();
 		expObjects=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Expected Data")).trim();
 		sqlQuery=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"SQL Query")).trim();
@@ -64,8 +64,11 @@ public class TestAPI_GetParticipants extends TestBase{
 		RestAssured.baseURI = properties.getProperty("BaseURL");
 		httpRequest = RestAssured.given();
 		httpRequest.header("Ocp-Apim-Subscription-Key", properties.getProperty("OCM_SubscriptionKey"));
-
-		response = httpRequest.request(Method.POST,pathQuery);
+		
+		//To dynamically pass the eventID created during Data Injection
+		pathQuery=pathQuery.replaceAll("#", String.valueOf(Integer.parseInt(DB_eventID) - 2));
+		
+		response = httpRequest.request(Method.PUT,pathQuery);
 		TimeUnit.SECONDS.sleep(3);
 	}
 
@@ -110,8 +113,9 @@ public class TestAPI_GetParticipants extends TestBase{
 		report.log(LogStatus.INFO, "JSON Schema file used: "+jsonSchemaFile);
 		response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchemaInClasspath("jsonSchema/"+jsonSchemaFile));
 	}
-
-	@Test (enabled = true,dependsOnMethods = {"checkStatusCode","validateJSONSchema"}, description="Validating Response body data against DB")
+	
+	//(enabled = true,dependsOnMethods = {"checkStatusCode","validateJSONSchema"}, description="Validating Response body data against DB")
+	@Test (enabled = true, description="Validating Response body data against DB")
 	void checkResponseBody() throws ClassNotFoundException, IOException, SQLException {
 
 		String responseBody = response.getBody().asString();
