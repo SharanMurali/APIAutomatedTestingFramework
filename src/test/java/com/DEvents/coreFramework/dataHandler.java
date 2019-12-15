@@ -33,12 +33,16 @@ public class dataHandler {
 	 * 
 	 */
 	public static void json2xlsx(String jsonInput, String xlOutputfilename){
-		String jsonString;
-		if(jsonInput.startsWith("[{")) {
-			jsonString = "{\"infile\": "+jsonInput+"}";
-		}else {
-			jsonString = "{\"infile\": ["+jsonInput+"]}";
-	}//jsonString = "{\"infile\": "+jsonInput+"}";
+
+		String a=Character.toString(jsonInput.charAt(0));
+		switch (a) {
+		case "{":
+			jsonInput="["+jsonInput+"]";
+			break;
+		default:
+			break;
+		}
+		String jsonString = "{\"infile\": "+jsonInput+"}";
 		JSONObject output;
 		try {
 			//To convert json data into csv
