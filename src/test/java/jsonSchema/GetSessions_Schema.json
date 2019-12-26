@@ -1,0 +1,124 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "array",
+  "title": "The Root Schema",
+  "items": {
+    "$id": "#/items",
+    "type": "object",
+    "title": "The Items Schema",
+    "required": [
+      "SessionId",
+      "EventId",
+      "SessionName",
+      "SessionDesc",
+      "FclttrName",
+      "FclttrDescription",
+      "SessionStartDtm",
+      "SessionEndDtm",
+      "SessionVenue",
+      "UserStatus"
+    ],
+    "properties": {
+      "SessionId": {
+        "$id": "#/items/properties/SessionId",
+        "type": "integer",
+        "title": "The Sessionid Schema",
+        "default": 0,
+        "examples": [
+          10
+        ]
+      },
+      "EventId": {
+        "$id": "#/items/properties/EventId",
+        "type": "integer",
+        "title": "The Eventid Schema",
+        "default": 0,
+        "examples": [
+          42
+        ]
+      },
+      "SessionName": {
+        "$id": "#/items/properties/SessionName",
+        "type": "string",
+        "title": "The Sessionname Schema",
+        "default": "",
+        "examples": [
+          "LSHC 2019 SESSION 1"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "SessionDesc": {
+        "$id": "#/items/properties/SessionDesc",
+        "type": "string",
+        "title": "The Sessiondesc Schema",
+        "default": "",
+        "examples": [
+          "LSHC 2019 description"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "FclttrName": {
+        "$id": "#/items/properties/FclttrName",
+        "type": "string",
+        "title": "The Fclttrname Schema",
+        "default": "",
+        "examples": [
+          "Ponnu Kailasam"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "FclttrDescription": {
+        "$id": "#/items/properties/FclttrDescription",
+        "type": "string",
+        "title": "The Fclttrdescription Schema",
+        "default": "",
+        "examples": [
+          ""
+        ],
+        "pattern": "^(.*)$"
+      },
+      "SessionStartDtm": {
+        "$id": "#/items/properties/SessionStartDtm",
+        "type": "string",
+        "title": "The Sessionstartdtm Schema",
+        "default": "",
+        "examples": [
+          "2019-10-01T09:00:00"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "SessionEndDtm": {
+        "$id": "#/items/properties/SessionEndDtm",
+        "type": "string",
+        "title": "The Sessionenddtm Schema",
+        "default": "",
+        "examples": [
+          "2019-10-31T05:00:00"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "SessionVenue": {
+        "$id": "#/items/properties/SessionVenue",
+        "type": "string",
+        "title": "The Sessionvenue Schema",
+        "default": "",
+        "examples": [
+          "Deloitte Towers 1F"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "UserStatus": {
+        "$id": "#/items/properties/UserStatus",
+        "type": "string",
+        "title": "The Userstatus Schema",
+        "default": "",
+        "examples": [
+          "REGISTERED"
+        ],
+        "pattern": "^(.*)$"
+      }
+    }
+  }
+}
