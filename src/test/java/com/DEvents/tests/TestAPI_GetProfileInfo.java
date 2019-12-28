@@ -3,7 +3,6 @@ package com.DEvents.tests;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.concurrent.TimeUnit;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
@@ -22,22 +21,20 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 /**
- * This validates the API that fetches all the Participants “User ID” 
- * @author shmurali
- * @since 17 Nov 2019
+ * This validates the API that fetches all the Member Profile Info
+ * 
  */
-public class TestAPI_GetParticipants extends TestBase{
+public class TestAPI_GetProfileInfo extends TestBase{
 	
 	public static RequestSpecification httpRequest;
 	public static Response response;
-	String sheetName = "GetParticipants";	//Change as per API being Tested
 
 	//List of data input needed for tests
 	String pathQuery="";
+	String emailId="";
 	String statusCode="";
 	String cntntType="";
 	String cntntEncode="";
-	int respTime=5;
 	String jsonSchemaFile="";
 	String expObjects="";
 	String sqlQuery="";
@@ -45,19 +42,24 @@ public class TestAPI_GetParticipants extends TestBase{
 
 
 
-	@BeforeTest (description="To prepare the API Request and capture the Response by sourcing data from Excel")
+	@BeforeTest (description="To make the API Request and capture the Response by sourcing data from Excel")
 	void getResponse() throws IOException, InterruptedException{
 
+		//Read data from Excel
+		String sheetName = "GetProfileInfo";	//Change as per API being Tested
+		String filepath = System.getProperty("user.dir") + "/" + "src/test/java/com/DEvents/tests/Config/APITestControl.xlsx"; // Common for all APIs
+
 		//List data needed for validations
-		pathQuery=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"pathQuery")).trim();
+		emailId = XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"EmailID")).trim();
+		pathQuery=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"pathQuery")).trim()+emailId;
 		statusCode=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Status Code")).trim();
 		cntntType=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Content-Type")).trim();
 		cntntEncode=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Content Encoding")).trim();
-		respTime=Integer.parseInt(XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Expected Max. Response Time (sec)")).trim());
 		jsonSchemaFile=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Schema File")).trim();
 		expObjects=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Expected Data")).trim();
 		sqlQuery=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"SQL Query")).trim();
 		sqlParms=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Parameters")).trim();
+
 
 		//Calling API for capturing response
 		RestAssured.baseURI = properties.getProperty("BaseURL");
@@ -65,7 +67,7 @@ public class TestAPI_GetParticipants extends TestBase{
 		httpRequest.header("Ocp-Apim-Subscription-Key", properties.getProperty("OCM_SubscriptionKey"));
 
 		response = httpRequest.request(Method.POST,pathQuery);
-		TimeUnit.SECONDS.sleep(3);
+		Thread.sleep(3000);
 	}
 
 	@Test (description="Validating Status Code")
@@ -101,7 +103,7 @@ public class TestAPI_GetParticipants extends TestBase{
 
 		Long responseTime = response.getTime();
 		report.log(LogStatus.INFO, "Actual Response Time: "+responseTime+" milliseconds");
-		Assert.assertTrue(responseTime< (respTime * 1000), "Response takes more than "+respTime+" seconds");
+		Assert.assertTrue(responseTime<5000, "Response takes more than 5 seconds");
 	}
 
 	@Test (dependsOnMethods = "checkStatusCode", description="Validating JSON-Schema of Response")
@@ -117,12 +119,12 @@ public class TestAPI_GetParticipants extends TestBase{
 		report.log(LogStatus.INFO, "Response Body : "+responseBody);
 
 		//Storing JSON data into Excel file
-		dataHandler.json2xlsx(responseBody, sheetName);
+		dataHandler.json2xlsx(responseBody, "GetProfileInfo");
 
 		//Storing DB result into Excel file
-		DBConnectivity.dbResultSet2xlsx(DBConnectivity.getSQLQuery(sqlQuery,sqlParms), sheetName, expObjects);
+		DBConnectivity.dbResultSet2xlsx(DBConnectivity.getSQLQuery(sqlQuery,sqlParms), "GetProfileInfo", expObjects);
 
-		Assert.assertTrue(dataHandler.compareOutputSheets(sheetName), "Found mismatch between Json output and Database results");
+		Assert.assertTrue(dataHandler.compareOutputSheets("GetProfileInfo"), "Found mismatch between Json output and Database results");
 
 	}
 }
