@@ -125,7 +125,7 @@ public class TestAPI_MarkMyAttendance_N1 extends TestBase{
 		dataHandler.json2xlsx(responseBody, sheetName);
 
 		//Storing DB result into Excel file
-		DBConnectivity.dbResultSet2xlsx(DBConnectivity.getSQLQuery(sqlQuery,sqlParms), sheetName, expObjects);
+		DBConnectivity.dbResultSet2xlsx(DBConnectivity.getSQLQuery(sqlQuery,String.valueOf(Integer.parseInt(DB_eventID) - 2)), sheetName, expObjects);
 
 		Assert.assertTrue(dataHandler.compareOutputSheets(sheetName), "Found mismatch between Json output and Database results");
 
