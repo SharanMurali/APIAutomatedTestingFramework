@@ -17,9 +17,6 @@ import com.relevantcodes.extentreports.LogStatus;
 
 public class TestBase {
 
-	//	public static RequestSpecification httpRequest;
-	//	public static Response response;
-
 	public static Properties properties=null;
 	public static String configFile=null;
 	public static String filepath=null;

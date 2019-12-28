@@ -42,6 +42,7 @@ public class dataHandler {
 		default:
 			break;
 		}
+
 		String jsonString = "{\"infile\": "+jsonInput+"}";
 		JSONObject output;
 		try {

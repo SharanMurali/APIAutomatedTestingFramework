@@ -1,0 +1,287 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "array",
+  "title": "The Root Schema",
+  "items": {
+    "$id": "#/items",
+    "type": "object",
+    "title": "The Items Schema",
+    "required": [
+      "EventId",
+      "EventCode",
+      "EventName",
+      "EventDesc",
+      "EventCategory",
+      "EventStrtDtm",
+      "EventEndDtm",
+      "EventLocation",
+      "EventType",
+      "EventVenue",
+      "EventVenueAddress",
+      "EventGmfctnInd",
+      "EventGmfctnATTDNCPNTS",
+      "EventApprvInd",
+      "EventLogo",
+      "EventLogoType",
+      "EventQR",
+      "RcrdCreatnDtm",
+      "RcrdCreatnUserId",
+      "LastUpdtDTM",
+      "LastUpdtUserId",
+      "EventTargetAudnc",
+      "EventStatus",
+      "IsGlobal",
+      "IsSponsor"
+    ],
+    "properties": {
+      "EventId": {
+        "$id": "#/items/properties/EventId",
+        "type": "integer",
+        "title": "The Eventid Schema",
+        "default": 0,
+        "examples": [
+          3
+        ]
+      },
+      "EventCode": {
+        "$id": "#/items/properties/EventCode",
+        "type": "string",
+        "title": "The Eventcode Schema",
+        "default": "",
+        "examples": [
+          "EVT190818234354390"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "EventName": {
+        "$id": "#/items/properties/EventName",
+        "type": "string",
+        "title": "The Eventname Schema",
+        "default": "",
+        "examples": [
+          "Work Pride 2019"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "EventDesc": {
+        "$id": "#/items/properties/EventDesc",
+        "type": "string",
+        "title": "The Eventdesc Schema",
+        "default": "",
+        "examples": [
+          "Work Pride is very nice Summit"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "EventCategory": {
+        "$id": "#/items/properties/EventCategory",
+        "type": "string",
+        "title": "The Eventcategory Schema",
+        "default": "",
+        "examples": [
+          "Learning & Development"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "EventStrtDtm": {
+        "$id": "#/items/properties/EventStrtDtm",
+        "type": "string",
+        "title": "The Eventstrtdtm Schema",
+        "default": "",
+        "examples": [
+          "2019-01-01T03:30:00"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "EventEndDtm": {
+        "$id": "#/items/properties/EventEndDtm",
+        "type": "string",
+        "title": "The Eventenddtm Schema",
+        "default": "",
+        "examples": [
+          "2019-05-07T23:30:00"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "EventLocation": {
+        "$id": "#/items/properties/EventLocation",
+        "type": "string",
+        "title": "The Eventlocation Schema",
+        "default": "",
+        "examples": [
+          "Hyderabad"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "EventType": {
+        "$id": "#/items/properties/EventType",
+        "type": "string",
+        "title": "The Eventtype Schema",
+        "default": "",
+        "examples": [
+          "I"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "EventVenue": {
+        "$id": "#/items/properties/EventVenue",
+        "type": "string",
+        "title": "The Eventvenue Schema",
+        "default": "",
+        "examples": [
+          "Deloitte Towers 1F"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "EventVenueAddress": {
+        "$id": "#/items/properties/EventVenueAddress",
+        "type": "string",
+        "title": "The Eventvenueaddress Schema",
+        "default": "",
+        "examples": [
+          "Deloitte Towers Gachibowli Hyderabad"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "EventGmfctnInd": {
+        "$id": "#/items/properties/EventGmfctnInd",
+        "type": "string",
+        "title": "The Eventgmfctnind Schema",
+        "default": "",
+        "examples": [
+          "Y"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "EventGmfctnATTDNCPNTS": {
+        "$id": "#/items/properties/EventGmfctnATTDNCPNTS",
+        "type": "integer",
+        "title": "The Eventgmfctnattdncpnts Schema",
+        "default": 0,
+        "examples": [
+          20
+        ]
+      },
+      "EventApprvInd": {
+        "$id": "#/items/properties/EventApprvInd",
+        "type": "string",
+        "title": "The Eventapprvind Schema",
+        "default": "",
+        "examples": [
+          "Y"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "EventLogo": {
+        "$id": "#/items/properties/EventLogo",
+        "type": "string",
+        "title": "The Eventlogo Schema",
+        "default": "",
+        "examples": [
+          "1231241sdqfsgdarq1224142"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "EventLogoType": {
+        "$id": "#/items/properties/EventLogoType",
+        "type": "string",
+        "title": "The Eventlogotype Schema",
+        "default": "",
+        "examples": [
+          "png"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "EventQR": {
+        "$id": "#/items/properties/EventQR",
+        "type": "string",
+        "title": "The Eventqr Schema",
+        "default": "",
+        "examples": [
+          "1231245"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "RcrdCreatnDtm": {
+        "$id": "#/items/properties/RcrdCreatnDtm",
+        "type": "string",
+        "title": "The Rcrdcreatndtm Schema",
+        "default": "",
+        "examples": [
+          "2018-12-30T18:30:00Z"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "RcrdCreatnUserId": {
+        "$id": "#/items/properties/RcrdCreatnUserId",
+        "type": "string",
+        "title": "The Rcrdcreatnuserid Schema",
+        "default": "",
+        "examples": [
+          "gagkaur"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "LastUpdtDTM": {
+        "$id": "#/items/properties/LastUpdtDTM",
+        "type": "string",
+        "title": "The Lastupdtdtm Schema",
+        "default": "",
+        "examples": [
+          "2018-12-30T18:30:00Z"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "LastUpdtUserId": {
+        "$id": "#/items/properties/LastUpdtUserId",
+        "type": "string",
+        "title": "The Lastupdtuserid Schema",
+        "default": "",
+        "examples": [
+          "gagkaur"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "EventTargetAudnc": {
+        "$id": "#/items/properties/EventTargetAudnc",
+        "type": "string",
+        "title": "The Eventtargetaudnc Schema",
+        "default": "",
+        "examples": [
+          "ALL"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "EventStatus": {
+        "$id": "#/items/properties/EventStatus",
+        "type": "string",
+        "title": "The Eventstatus Schema",
+        "default": "",
+        "examples": [
+          "COMPLETED"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "IsGlobal": {
+        "$id": "#/items/properties/IsGlobal",
+        "type": "boolean",
+        "title": "The Isglobal Schema",
+        "default": false,
+        "examples": [
+          true
+        ]
+      },
+      "IsSponsor": {
+        "$id": "#/items/properties/IsSponsor",
+        "type": "boolean",
+        "title": "The Issponsor Schema",
+        "default": false,
+        "examples": [
+          true
+        ]
+      }
+    }
+  }
+}
