@@ -1,13 +1,45 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 <suite name="DEvents_API_TestSuite" verbose="1" parallel="false">
-	<test name="DEvents_API_Tests" preserve-order="true">
- 		<classes>
-			<class name="com.DEvents.tests.TestAPI_RegisterOrCancelSessions_P1"></class>
+	<test name="GetEvents" preserve-order="true">
+		<classes>
+			<class name="com.DEvents.tests.TestAPI_GetEvents"></class>
 		</classes>
 	</test>
-	<test name="DEvents_API_Tests2" preserve-order="true">
- 		<classes>
-			<class name="com.DEvents.tests.TestAPI_RegisterOrCancelSessions_N1"></class>
+	<test name="GetParticipants" preserve-order="true">
+		<classes>
+			<class name="com.DEvents.tests.TestAPI_GetParticipants"></class>
+		</classes>
+	</test>
+	<test name="GetProfileInfo" preserve-order="true">
+		<classes>
+			<class name="com.DEvents.tests.TestAPI_GetProfileInfo"></class>
+		</classes>
+	</test>
+	<test name="MarkMyAttendanceP1" preserve-order="true">
+		<classes>
+			<class name="com.DEvents.tests.TestAPI_MarkMyAttendance_P1"></class>
+		</classes>
+	</test>
+	<test name="MarkMyAttendanceP2" preserve-order="true">
+		<classes>
+			<class name="com.DEvents.tests.TestAPI_MarkMyAttendance_P2"></class>
+		</classes>
+	</test>
+	<test name="MarkMyAttendanceN1" preserve-order="true">
+		<classes>
+			<class name="com.DEvents.tests.TestAPI_MarkMyAttendance_N1"></class>
+		</classes>
+	</test>
+	<test name="RegisterOrCancelSessionsP1" preserve-order="true">
+		<classes>
+			<class
+				name="com.DEvents.tests.TestAPI_RegisterOrCancelSessions_P1"></class>
+		</classes>
+	</test>
+	<test name="RegisterOrCancelSessionsN1" preserve-order="true">
+		<classes>
+			<class
+				name="com.DEvents.tests.TestAPI_RegisterOrCancelSessions_N1"></class>
 		</classes>
 	</test>
 </suite>
