@@ -112,7 +112,7 @@ public class TestAPI_MarkMyAttendance_P2 extends TestBase{
 	@Test (dependsOnMethods = "checkStatusCode", description="Validating JSON-Schema of Response",priority=5)
 	void validateJSONSchema() {
 		report.log(LogStatus.INFO, "JSON Schema file used: "+jsonSchemaFile);
-		response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchemaInClasspath("jsonSchema/"+jsonSchemaFile));
+		response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchemaInClasspath(jsonSchemaFile));
 	}
 	
 	//(enabled = true,dependsOnMethods = {"checkStatusCode","validateJSONSchema"}, description="Validating Response body data against DB")

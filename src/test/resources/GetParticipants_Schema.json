@@ -1,0 +1,27 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "array",
+  "title": "The Root Schema",
+  "items": {
+    "$id": "#/items",
+    "type": "object",
+    "title": "The Items Schema",
+    "required": [
+      "UserId"
+    ],
+    "properties": {
+      "UserId": {
+        "$id": "#/items/properties/UserId",
+        "type": "string",
+        "title": "The Userid Schema",
+        "default": "",
+        "examples": [
+          "spriyankalekkala"
+        ],
+        "pattern": "^(.*)$"
+      }
+    }
+  }
+}

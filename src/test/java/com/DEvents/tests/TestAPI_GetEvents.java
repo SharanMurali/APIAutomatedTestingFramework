@@ -107,7 +107,7 @@ public class TestAPI_GetEvents extends TestBase{
 	@Test (dependsOnMethods = "checkStatusCode", description="Validating JSON-Schema of Response",priority=5)
 	void validateJSONSchema() {
 		report.log(LogStatus.INFO, "JSON Schema file used: "+jsonSchemaFile);
-		response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchemaInClasspath("jsonSchema/"+jsonSchemaFile));
+		response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchemaInClasspath(jsonSchemaFile));
 	}
 
 	@Test (priority=6,enabled = true,dependsOnMethods = {"checkStatusCode","validateJSONSchema"}, description="Validating Response body data against DB")
