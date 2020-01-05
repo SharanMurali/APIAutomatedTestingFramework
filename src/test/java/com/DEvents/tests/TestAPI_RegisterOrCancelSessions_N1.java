@@ -5,12 +5,11 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import org.testng.Assert;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.DEvents.coreFramework.DBConnectivity;
 import com.DEvents.coreFramework.TestBase;
-import com.DEvents.utils.XLUtils;
+import com.DEvents.tests.Config.TestDataProviderClass;
 import com.relevantcodes.extentreports.LogStatus;
 
 import io.restassured.RestAssured;
@@ -33,29 +32,20 @@ public class TestAPI_RegisterOrCancelSessions_N1 extends TestBase{
 	//List of data input needed for tests
 	String pathQuery="";
 	String statusCode="";
-	String cntntType="";
-	String cntntEncode="";
 	int respTime=5;
-	String jsonSchemaFile="";
-	String expObjects="";
 	String sqlQuery="";
 	String sqlParms=null;
 
+	
+	/**Test Description :: To make the API Request and capture the Response by calling data from Data Provider class **/
+	@Test (priority=0,dataProvider="RegisterOrCancelSessionsN1_Input", dataProviderClass=TestDataProviderClass.class,description="API Requesting & Capturing Response")
+	public void getResponse(String Query, String stsCode, String responseTime, String sqlQ, String parm) throws IOException, InterruptedException{
 
-
-	@BeforeTest (description="To prepare the API Request and capture the Response by sourcing data from Excel")
-	void getResponse() throws IOException, InterruptedException{
-
-		//List data needed for validations
-		pathQuery=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"pathQuery")).trim();
-		statusCode=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Status Code")).trim();
-		//cntntType=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Content-Type")).trim();
-		//cntntEncode=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Content Encoding")).trim();
-		respTime=Integer.parseInt(XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Expected Max. Response Time (sec)")));
-		//jsonSchemaFile=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Schema File")).trim();
-		//expObjects=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Expected Data")).trim();
-		sqlQuery=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"SQL Query")).trim();
-		sqlParms=XLUtils.getCellData(filepath,sheetName,1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Parameters")).trim();
+		pathQuery = Query;
+		statusCode=stsCode;
+		respTime = Integer.parseInt(responseTime);
+		sqlQuery=sqlQ;
+		sqlParms=parm;
 
 		//Calling API for capturing response
 		RestAssured.baseURI = properties.getProperty("BaseURL");
@@ -70,7 +60,7 @@ public class TestAPI_RegisterOrCancelSessions_N1 extends TestBase{
 		TimeUnit.SECONDS.sleep(3);
 	}
 
-	@Test (description="Validating Status Code")
+	@Test (priority=1,description="Validating Status Code")
 	void checkStatusCode() throws IOException {
 
 		int actualstatusCode = response.getStatusCode();
@@ -79,7 +69,7 @@ public class TestAPI_RegisterOrCancelSessions_N1 extends TestBase{
 		Assert.assertEquals(actualstatusCode, Integer.parseInt(statusCode));
 	}
 
-	@Test (dependsOnMethods = "checkStatusCode", description="Validating Response time to be less than 5sec")
+	@Test (priority=2,dependsOnMethods = "checkStatusCode", description="Validating Response time to be less than 5sec")
 	void checkResponseTime() {
 
 		Long responseTime = response.getTime();
@@ -87,12 +77,12 @@ public class TestAPI_RegisterOrCancelSessions_N1 extends TestBase{
 		Assert.assertTrue(responseTime< (respTime * 1000), "Response takes more than "+respTime+" seconds");
 	}
 	
-	@Test (enabled = true,dependsOnMethods = "checkStatusCode", description="Validating Registration Cancellation")
+	@Test (priority=3,enabled = true,dependsOnMethods = "checkStatusCode", description="Validating Registration Cancellation")
 	void checkRegistrationInDB() throws ClassNotFoundException, IOException {
 		
 		String[][] str=DBConnectivity.getResultFromDB(DBConnectivity.getSQLQuery(sqlQuery,sqlParms));
 		
-		if(!str[0][0].isEmpty() && !str[0][0].equals("APITest@deloitte.com")) {
+		if(!str[0][0].isEmpty() && !str[0][0].equals(sqlParms)) {
 			report.log(LogStatus.PASS, "Cancelled Registration Successful");
 		}
 		else {

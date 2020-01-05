@@ -37,7 +37,7 @@ public class TestBase {
 	public void setup() throws ClassNotFoundException, IOException {
 		properties = new Properties();
 		configFile = "src/test/java/com/DEvents/tests/Config/API_Config.properties";
-		filepath = System.getProperty("user.dir") + "/" + "src/test/java/com/DEvents/tests/Config/APITestControl.xlsx"; // Common for all APIs
+		filepath = System.getProperty("user.dir") + "/" + "src/test/java/com/DEvents/tests/Config/APIDataMockupCollection.xlsx"; // Common for all APIs
 		try {
 			in = new FileInputStream(System.getProperty("user.dir") + "/" + configFile);
 			properties.load(in);

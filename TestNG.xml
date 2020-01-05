@@ -1,9 +1,9 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 <suite name="DEvents_API_TestSuite" verbose="1" thread-count="1">
-	<test name="DEvents_API_Tests" parallel="methods" preserve-order="true" thread-count="1">
- 		<classes>
-			<class name="com.DEvents.tests.TestAPI_RegisterOrCancelSessions_P1"></class>
-			<class name="com.DEvents.tests.TestAPI_RegisterOrCancelSessions_N1"></class>
+	<test name="DEvents_API_Tests" preserve-order="true"
+		thread-count="1">
+		<classes>
+			<class name="com.DEvents.tests.TestAPI_GetFeedbackQuestions"></class>
 		</classes>
 	</test>
 </suite>

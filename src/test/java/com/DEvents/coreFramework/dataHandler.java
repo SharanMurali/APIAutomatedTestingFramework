@@ -110,15 +110,13 @@ public class dataHandler {
     	int index =queryBatch.length-1;
     	int rowCount=0;
 		//Read data from Config Excel
-		String filepath = System.getProperty("user.dir") + "/" + "src/test/java/com/DEvents/tests/Config/APITestControl.xlsx"; // Common for all APIs
+		String filepath = System.getProperty("user.dir") + "/" + "src/test/java/com/DEvents/tests/Config/APIDataMockupCollection.xlsx"; // Common for all APIs
 		String sheetName;
-//    	FileInputStream fi=new FileInputStream(filepath);
-//    	XSSFWorkbook wb = new XSSFWorkbook(fi);
     	String execOrder[] =sequenceIndicator.split(";");
     	
     	for(String s:execOrder) {
     		switch (s) {
-			case "D":    /* To add all the Delete Queries from Data Ejection sheet into query Batch*/
+			case "D":    /* To add all the Delete Queries(D) from Data Ejection sheet into query Batch*/
 				sheetName = "DataEjection";
 				rowCount = XLUtils.getRowCount(filepath,sheetName);
 				for (int i=0;i<rowCount;i++) {
@@ -129,7 +127,7 @@ public class dataHandler {
 					queryBatch[index+i] = XLUtils.getCellData(filepath,sheetName,i+1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Query")).trim();
 				}
 				break;
-			case "I":    /* To add all the Insert Queries from Data Injection sheet into query Batch*/
+			case "I":    /* To add all the Insert Queries(I) from Data Injection sheet into query Batch*/
 				sheetName = "DataInjection";
 				rowCount = XLUtils.getRowCount(filepath,sheetName);
 				for (int i=0;i<rowCount;i++) {
@@ -140,7 +138,7 @@ public class dataHandler {
 					queryBatch[index+i] = XLUtils.getCellData(filepath,sheetName,i+1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Query")).trim();
 				}
 				break;
-			case "U":    /* To add all the Update Queries from Data Updation sheet into query Batch*/
+			case "U":    /* To add all the Update Queries(U) from Data Updation sheet into query Batch*/
 				sheetName = "DataUpdation";
 				rowCount = XLUtils.getRowCount(filepath,sheetName);
 				for (int i=0;i<rowCount;i++) {

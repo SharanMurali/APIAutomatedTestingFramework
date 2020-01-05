@@ -15,6 +15,11 @@
 			<class name="com.DEvents.tests.TestAPI_GetProfileInfo"></class>
 		</classes>
 	</test>
+		<test name="GetSessions" preserve-order="true">
+		<classes>
+			<class name="com.DEvents.tests.TestAPI_GetSessions"></class>
+		</classes>
+	</test>
 	<test name="MarkMyAttendanceP1" preserve-order="true">
 		<classes>
 			<class name="com.DEvents.tests.TestAPI_MarkMyAttendance_P1"></class>
@@ -40,6 +45,12 @@
 		<classes>
 			<class
 				name="com.DEvents.tests.TestAPI_RegisterOrCancelSessions_N1"></class>
+		</classes>
+	</test>
+		<test name="GetFeedbackQuestions" preserve-order="true">
+		<classes>
+			<class
+				name="com.DEvents.tests.TestAPI_GetFeedbackQuestions"></class>
 		</classes>
 	</test>
 </suite>

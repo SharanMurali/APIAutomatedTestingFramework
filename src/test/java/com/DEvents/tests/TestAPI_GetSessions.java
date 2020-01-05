@@ -24,14 +24,15 @@ import io.restassured.specification.RequestSpecification;
  * This validates the API that fetches all the Events List Info for attendee - GetEvents
  * 
  */
-public class TestAPI_GetEvents extends TestBase{
+public class TestAPI_GetSessions extends TestBase{
 	
 	public static RequestSpecification httpRequest;
 	public static Response response;
-	String sheetName = "GetEvents";	//Change as per API being Tested
+	String sheetName = "GetSessions";	//Change as per API being Tested
 
 	//List of data input needed for tests
 	String pathQuery="";
+	String eventId="";
 	String emailId="";
 	String statusCode="";
 	String cntntType="";
@@ -44,11 +45,12 @@ public class TestAPI_GetEvents extends TestBase{
 	
 
 	/**Test Description :: To make the API Request and capture the Response by calling data from Data Provider class **/
-	@Test (priority=0,dataProvider="GetEvents_Input", dataProviderClass=TestDataProviderClass.class,description="API Requesting & Capturing Response")
-	void getResponse(String Query, String email, String stsCode, String contentType, String contentEncode, 
+	@Test (priority=0,dataProvider="GetSessions_Input", dataProviderClass=TestDataProviderClass.class,description="API Requesting & Capturing Response")
+	void getResponse(String Query,String eventid, String email, String stsCode, String contentType, String contentEncode, 
 			String responseTime, String jsonSchema, String expctCol, String sqlQ, String parm) throws IOException, InterruptedException{
 
 		pathQuery = Query;
+		eventId = eventid;
 		emailId = email;
 		statusCode=stsCode;
 		cntntType=contentType;
@@ -64,7 +66,7 @@ public class TestAPI_GetEvents extends TestBase{
 		httpRequest = RestAssured.given();
 		httpRequest.header("Ocp-Apim-Subscription-Key", properties.getProperty("OCM_SubscriptionKey"));
 
-		response = httpRequest.request(Method.POST,pathQuery+emailId);
+		response = httpRequest.request(Method.POST,pathQuery.replace("{eventId}", eventId).replace("{emailId}", emailId));
 		TimeUnit.SECONDS.sleep(3);
 	}
 
