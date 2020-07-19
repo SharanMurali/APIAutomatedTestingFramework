@@ -21,18 +21,19 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 /**
- * This validates the API that fetches all the Participants “User ID” - GetParticipants
+ * This validates the API that fetches all the Feedback Questions related to a Session -GetFeedbackQuestions
+ * @since Jan 2019
  * @author shmurali
- * @since 17 Nov 2019
  */
-public class TestAPI_GetParticipants extends TestBase{
+public class TestAPI_GetFeedbackQuestions extends TestBase{
 
 	public static RequestSpecification httpRequest;
 	public static Response response;
-	String sheetName = "GetParticipants";	//Change as per API being Tested
+	String sheetName = "GetFeedbackQuestions";
 
-	//List of data input needed for tests
+	//List of data inputs needed for tests
 	String pathQuery="";
+	String emailId="";
 	String statusCode="";
 	String cntntType="";
 	String cntntEncode="";
@@ -40,13 +41,13 @@ public class TestAPI_GetParticipants extends TestBase{
 	String jsonSchemaFile="";
 	String expObjects="";
 	String sqlQuery="";
-	String sqlParms="";
+	String sqlParms=null;
 
 
 	/**Test Description :: To make the API Request and capture the Response by calling data from Data Provider class **/
-	@Test (priority=0,dataProvider="GetParticipants_Input", dataProviderClass=TestDataProviderClass.class,description="API Requesting & Capturing Response")
+	@Test (priority=0,dataProvider="GetFeedbackQuestions_Input", dataProviderClass=TestDataProviderClass.class,description="API Requesting & Capturing Response")
 	public void getResponse(String Query, String stsCode, String contentType, String contentEncode, 
-			String responseTime, String jsonSchema, String expctCol, String sqlQ) throws IOException, InterruptedException{
+			String responseTime, String jsonSchema, String expctCol, String sqlQ, String parm) throws IOException, InterruptedException{
 
 		pathQuery = Query;
 		statusCode=stsCode;
@@ -56,17 +57,18 @@ public class TestAPI_GetParticipants extends TestBase{
 		jsonSchemaFile=jsonSchema;
 		expObjects=expctCol;
 		sqlQuery=sqlQ;
+		sqlParms=parm;
 
 		//Calling API for capturing response
 		RestAssured.baseURI = properties.getProperty("BaseURL");
 		httpRequest = RestAssured.given();
 		httpRequest.header("Ocp-Apim-Subscription-Key", properties.getProperty("OCM_SubscriptionKey"));
 
-		response = httpRequest.request(Method.POST,pathQuery);
+		response = httpRequest.request(Method.POST,pathQuery.replace("{eventId}", DB_eventID).replace("{sessionId}", DB_kioskID));
 		TimeUnit.SECONDS.sleep(3);
 	}
-
-	@Test (description="Validating Status Code",priority=1)
+	
+	@Test (priority=1,description="Validating Status Code")
 	void checkStatusCode() throws IOException {
 
 		int actualstatusCode = response.getStatusCode();
@@ -75,7 +77,7 @@ public class TestAPI_GetParticipants extends TestBase{
 		Assert.assertEquals(actualstatusCode, Integer.parseInt(statusCode));
 	}
 
-	@Test (description="Validating Content-Type",priority=2)
+	@Test (priority=2,description="Validating Content-Type")
 	void checkContentType() {
 
 		String actualContentType = response.header("Content-Type");
@@ -84,7 +86,7 @@ public class TestAPI_GetParticipants extends TestBase{
 		Assert.assertEquals(actualContentType, cntntType);
 	}
 
-	@Test (description="Validating Content Encoding",priority=3)
+	@Test (priority=3,description="Validating Content Encoding")
 	void checkContentEncoding() {
 
 		String actualContentEncoding = response.header("Content-Encoding");
@@ -94,7 +96,7 @@ public class TestAPI_GetParticipants extends TestBase{
 	}
 
 
-	@Test (dependsOnMethods = "checkStatusCode", description="Validating Response time to be less than 5sec",priority=4)
+	@Test (priority=4,dependsOnMethods = "checkStatusCode", description="Validating Response time to be less than 5sec")
 	void checkResponseTime() {
 
 		Long responseTime = response.getTime();
@@ -102,7 +104,7 @@ public class TestAPI_GetParticipants extends TestBase{
 		Assert.assertTrue(responseTime< (respTime * 1000), "Response takes more than "+respTime+" seconds");
 	}
 
-	@Test (dependsOnMethods = "checkStatusCode", description="Validating JSON-Schema of Response",priority=5)
+	@Test (priority=5,dependsOnMethods = "checkStatusCode", description="Validating JSON-Schema of Response")
 	void validateJSONSchema() {
 		report.log(LogStatus.INFO, "JSON Schema file used: "+jsonSchemaFile);
 		response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchemaInClasspath(jsonSchemaFile));
@@ -119,9 +121,10 @@ public class TestAPI_GetParticipants extends TestBase{
 
 		//Storing DB result into Excel file
 		DBConnectivity.dbResultSet2xlsx(DBConnectivity.getSQLQuery(sqlQuery,sqlParms), sheetName, expObjects);
-
+		
 		//Comparing the JSON data vs. DB data
 		Assert.assertTrue(dataHandler.compareOutputSheets(sheetName), "Found mismatch between Json output and Database results");
 
 	}
+
 }

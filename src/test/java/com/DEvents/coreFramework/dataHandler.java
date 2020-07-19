@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -31,6 +33,16 @@ public class dataHandler {
 	 * 
 	 */
 	public static void json2xlsx(String jsonInput, String xlOutputfilename){
+
+		String a=Character.toString(jsonInput.charAt(0));
+		switch (a) {
+		case "{":
+			jsonInput="["+jsonInput+"]";
+			break;
+		default:
+			break;
+		}
+
 		String jsonString = "{\"infile\": "+jsonInput+"}";
 		JSONObject output;
 		try {
@@ -91,6 +103,60 @@ public class dataHandler {
         fi.close();
         return equalSheets;
     }
+    
+    public static String[] querySetReader(String sequenceIndicator) throws IOException {
+    	
+    	String queryBatch[] = new String[1];
+    	int index =queryBatch.length-1;
+    	int rowCount=0;
+		//Read data from Config Excel
+		String filepath = System.getProperty("user.dir") + "/" + "src/test/java/com/DEvents/tests/Config/APIDataMockupCollection.xlsx"; // Common for all APIs
+		String sheetName;
+    	String execOrder[] =sequenceIndicator.split(";");
+    	
+    	for(String s:execOrder) {
+    		switch (s) {
+			case "D":    /* To add all the Delete Queries(D) from Data Ejection sheet into query Batch*/
+				sheetName = "DataEjection";
+				rowCount = XLUtils.getRowCount(filepath,sheetName);
+				for (int i=0;i<rowCount;i++) {
+					if (queryBatch.length == index+i) {
+			              // expand list
+						queryBatch = Arrays.copyOf(queryBatch, queryBatch.length + 1);
+			         }
+					queryBatch[index+i] = XLUtils.getCellData(filepath,sheetName,i+1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Query")).trim();
+				}
+				break;
+			case "I":    /* To add all the Insert Queries(I) from Data Injection sheet into query Batch*/
+				sheetName = "DataInjection";
+				rowCount = XLUtils.getRowCount(filepath,sheetName);
+				for (int i=0;i<rowCount;i++) {
+					if (queryBatch.length == index+i) {
+			              // expand list
+						queryBatch = Arrays.copyOf(queryBatch, queryBatch.length + 1);
+			         }
+					queryBatch[index+i] = XLUtils.getCellData(filepath,sheetName,i+1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Query")).trim();
+				}
+				break;
+			case "U":    /* To add all the Update Queries(U) from Data Updation sheet into query Batch*/
+				sheetName = "DataUpdation";
+				rowCount = XLUtils.getRowCount(filepath,sheetName);
+				for (int i=0;i<rowCount;i++) {
+					if (queryBatch.length == index+i) {
+			              // expand list
+						queryBatch = Arrays.copyOf(queryBatch, queryBatch.length + 1);
+			         }
+					queryBatch[index+i] = XLUtils.getCellData(filepath,sheetName,i+1,XLUtils.getColumnIndexbyHeader(filepath,sheetName,"Query")).trim();
+				}
+				break;
+
+			default:
+				break;
+			}
+    		index =queryBatch.length;
+    	}
+		return queryBatch;
+    	}
 
 }
 

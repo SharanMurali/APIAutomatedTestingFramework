@@ -1,0 +1,37 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "array",
+  "title": "The Root Schema",
+  "items": {
+    "$id": "#/items",
+    "type": "object",
+    "title": "The Items Schema",
+    "required": [
+      "FeedBackQuestionId",
+      "FeedBackQuestion"
+    ],
+    "properties": {
+      "FeedBackQuestionId": {
+        "$id": "#/items/properties/FeedBackQuestionId",
+        "type": "integer",
+        "title": "The Feedbackquestionid Schema",
+        "default": 0,
+        "examples": [
+          3
+        ]
+      },
+      "FeedBackQuestion": {
+        "$id": "#/items/properties/FeedBackQuestion",
+        "type": "string",
+        "title": "The Feedbackquestion Schema",
+        "default": "",
+        "examples": [
+          "LSHC 2019 SESSION 1:Question1"
+        ],
+        "pattern": "^(.*)$"
+      }
+    }
+  }
+}

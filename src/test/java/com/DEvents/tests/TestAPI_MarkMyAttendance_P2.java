@@ -21,15 +21,16 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 /**
- * This validates the API that fetches all the Participants “User ID” - GetParticipants
+ * This validates the API that checks already Marked Attendance for any Event/Session
  * @author shmurali
- * @since 17 Nov 2019
+ * @since 1 Dec 2019
  */
-public class TestAPI_GetParticipants extends TestBase{
-
+public class TestAPI_MarkMyAttendance_P2 extends TestBase{
+	
 	public static RequestSpecification httpRequest;
 	public static Response response;
-	String sheetName = "GetParticipants";	//Change as per API being Tested
+	
+	String sheetName = "MarkMyAttendance_P2";	//Change as per API being Tested
 
 	//List of data input needed for tests
 	String pathQuery="";
@@ -40,13 +41,14 @@ public class TestAPI_GetParticipants extends TestBase{
 	String jsonSchemaFile="";
 	String expObjects="";
 	String sqlQuery="";
-	String sqlParms="";
+	String sqlParms=null;
+
 
 
 	/**Test Description :: To make the API Request and capture the Response by calling data from Data Provider class **/
-	@Test (priority=0,dataProvider="GetParticipants_Input", dataProviderClass=TestDataProviderClass.class,description="API Requesting & Capturing Response")
+	@Test (priority=0,dataProvider="MarkMyAttendanceP2_Input", dataProviderClass=TestDataProviderClass.class,description="API Requesting & Capturing Response")
 	public void getResponse(String Query, String stsCode, String contentType, String contentEncode, 
-			String responseTime, String jsonSchema, String expctCol, String sqlQ) throws IOException, InterruptedException{
+			String responseTime, String jsonSchema, String expctCol, String sqlQ, String parm) throws IOException, InterruptedException{
 
 		pathQuery = Query;
 		statusCode=stsCode;
@@ -56,16 +58,21 @@ public class TestAPI_GetParticipants extends TestBase{
 		jsonSchemaFile=jsonSchema;
 		expObjects=expctCol;
 		sqlQuery=sqlQ;
+		sqlParms=parm;
 
 		//Calling API for capturing response
 		RestAssured.baseURI = properties.getProperty("BaseURL");
 		httpRequest = RestAssured.given();
 		httpRequest.header("Ocp-Apim-Subscription-Key", properties.getProperty("OCM_SubscriptionKey"));
-
-		response = httpRequest.request(Method.POST,pathQuery);
+		
+		//To dynamically pass the eventID created during Data Injection
+		pathQuery=pathQuery.replaceAll("#", DB_eventID);
+		
+		response = httpRequest.request(Method.PUT,pathQuery);
 		TimeUnit.SECONDS.sleep(3);
 	}
-
+	
+	
 	@Test (description="Validating Status Code",priority=1)
 	void checkStatusCode() throws IOException {
 
@@ -107,8 +114,9 @@ public class TestAPI_GetParticipants extends TestBase{
 		report.log(LogStatus.INFO, "JSON Schema file used: "+jsonSchemaFile);
 		response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchemaInClasspath(jsonSchemaFile));
 	}
-
-	@Test (priority=6,enabled = true,dependsOnMethods = {"checkStatusCode","validateJSONSchema"}, description="Validating Response body data against DB")
+	
+	//(enabled = true,dependsOnMethods = {"checkStatusCode","validateJSONSchema"}, description="Validating Response body data against DB")
+	@Test (enabled = true, description="Validating Response body data against DB",priority=6)
 	void checkResponseBody() throws ClassNotFoundException, IOException, SQLException {
 
 		String responseBody = response.getBody().asString();
@@ -119,7 +127,7 @@ public class TestAPI_GetParticipants extends TestBase{
 
 		//Storing DB result into Excel file
 		DBConnectivity.dbResultSet2xlsx(DBConnectivity.getSQLQuery(sqlQuery,sqlParms), sheetName, expObjects);
-
+		
 		//Comparing the JSON data vs. DB data
 		Assert.assertTrue(dataHandler.compareOutputSheets(sheetName), "Found mismatch between Json output and Database results");
 
